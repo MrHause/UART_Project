@@ -13,6 +13,7 @@
 #include "UART_stm32.h"
 #include "ring_buffer.h"
 #include "commands.h"
+#include "ADC_stm32.h"
 
 volatile uint32_t timer_ms = 0;
 volatile uint8_t command_end = 0;
@@ -40,7 +41,7 @@ void delay_ms(int time)
 int main(void)
 {
 	GPIO_Config();
-
+	ADC_Config();
 
 	SysTick_Config( SystemCoreClock / 1000 );
 
