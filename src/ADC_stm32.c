@@ -16,7 +16,7 @@ static void ADC_GPIO_Config();
 void ADC_Config(){
 	ADC_GPIO_Config(); //configure PIN
 
-	RCC_ADCCLKConfig(RCC_PCLK2_Div6);
+	RCC_ADCCLKConfig(RCC_PCLK2_Div8);
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
 
 	ADC_InitTypeDef hadc;
