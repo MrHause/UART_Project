@@ -14,6 +14,7 @@
 #include "ring_buffer.h"
 #include "commands.h"
 #include "ADC_stm32.h"
+#include "TMP102_stm32.h"
 
 volatile uint32_t timer_ms = 0;
 volatile uint8_t command_end = 0;
@@ -42,6 +43,7 @@ int main(void)
 {
 	GPIO_Config();
 	ADC_Config();
+	TMP102_init();
 
 	SysTick_Config( SystemCoreClock / 1000 );
 

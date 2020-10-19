@@ -14,7 +14,8 @@ typedef enum{
 	NO_COMMAND = 0,
 	LED_ON,
 	LED_OFF,
-	ADC_GET_VALUE
+	ADC_GET_VALUE,
+	TMP102_TEMP
 }Commands_list;
 
 Commands_list command_analyse( Ring_buffer_type *buffer );

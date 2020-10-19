@@ -13,9 +13,11 @@
 #include <stdlib.h>
 #include "UART_stm32.h"
 #include "ADC_stm32.h"
+#include "TMP102_stm32.h"
 
 static void command_led_toogle( uint8_t state );
 static void command_adc_get_value( uint8_t channel );
+static void command_TMP102_get_temp();
 
 Commands_list command_analyse( Ring_buffer_type *buffer ){
 	Commands_list command = NO_COMMAND;
@@ -41,6 +43,8 @@ Commands_list command_analyse( Ring_buffer_type *buffer ){
 		command = LED_OFF;
 	else if( !strcmp( message, "ADC_GET_VALUE\r" ) )
 		command = ADC_GET_VALUE;
+	else if( !strcmp( message, "TMP102_TEMP\r" ) )
+		command = TMP102_TEMP;
 
 	free(message);
 	return command;
@@ -56,6 +60,10 @@ void command_execute( Commands_list command ){
 		break;
 	case ADC_GET_VALUE:
 		command_adc_get_value( ADC_Channel_0 );
+		break;
+	case TMP102_TEMP:
+		command_TMP102_get_temp();
+		break;
 	default:
 		break;
 	}
@@ -70,11 +78,21 @@ static void command_led_toogle(uint8_t state){
 
 static void command_adc_get_value(uint8_t channel){
 	uint32_t value;
-	char to_send[10];
+	char to_send[10] = {0};
 	value = ADC_get_value( channel );
 
 	float voltage = (float)value * 3.3f / 4096.0f;
-	sprintf(to_send, "%.2f", voltage);
+	sprintf(to_send, "%.2f\r\n", voltage);
+
+	send_string(USART2, to_send);
+}
+
+static void command_TMP102_get_temp(){
+	float temperature;
+	char to_send[10] = {0};
+	temperature = TMP102_get_temp();
+
+	sprintf( to_send, "%.2f\r\n", temperature );
 
 	send_string(USART2, to_send);
 }
